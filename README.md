@@ -1,1 +1,1 @@
-# advent-of-code
+# Advent of Code 2024 Solutions in Go
