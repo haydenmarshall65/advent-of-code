@@ -4,7 +4,11 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"regexp"
+	"strconv"
 )
+
+var total int
 
 func main() {
 	file, err := os.Open("corruptedMemory.txt")
@@ -23,11 +27,38 @@ func main() {
 		if err != nil {
 			break
 		}
-		log.Println(line)
-		//todo regex on line to find all instances of mul(X, Y)
+		// stringifiedLine := string(line)
+
+		regex := regexp.MustCompile(`mul\((([0-9]+),([0-9]+))\)`)
+
+		match := regex.FindAllStringSubmatch(string(line), -1)
+
+		evaluateAllMuls(match)
 	}
+
+	log.Println(total)
 }
 
 func mul(a int, b int) int {
 	return a * b
+}
+
+func evaluateAllMuls(allMuls [][]string) {
+	i := 0
+	for i < len(allMuls) {
+		x, err := strconv.Atoi(allMuls[i][2])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		y, err := strconv.Atoi(allMuls[i][3])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		total += mul(x, y)
+		i++
+	}
 }
