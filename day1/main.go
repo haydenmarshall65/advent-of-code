@@ -5,8 +5,11 @@ import (
 	"log"
 	"math"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
+
+	"golang.org/x/exp/maps"
 )
 
 var leftSide []string
@@ -61,6 +64,44 @@ func main() {
 	}
 
 	log.Println(total)
+
+	// part 2
+
+	i := 0
+	j := 0
+	var listOfTotals map[int]int = make(map[int]int)
+	var totalPart2 int
+	var totalCount int = 0
+	for i < len(leftSide) {
+		numToCount, err := strconv.Atoi(leftSide[i])
+
+		if err != nil {
+			log.Fatal(err)
+			break
+		}
+		numToCheck, err := strconv.Atoi(rightSide[j])
+
+		if err != nil {
+			log.Fatal(err)
+			break
+		}
+
+		if slices.Contains(maps.Keys(listOfTotals), numToCount) {
+			totalPart2 += numToCount * listOfTotals[numToCount]
+			i++
+			continue
+		} else if numToCheck > numToCount {
+			totalCount++
+			j++
+		} else {
+			listOfTotals[numToCount] = totalCount
+			totalPart2 += numToCount * totalCount
+			totalCount = 0
+			i++
+		}
+	}
+
+	log.Println(totalPart2)
 }
 
 func mergeSort(arr *[]string, left int, right int) {
