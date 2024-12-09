@@ -65,14 +65,14 @@ func main() {
 
 	log.Println(total)
 
-	// part 2
+	// part 2, not right, needs to be fixed
 
 	i := 0
 	j := 0
 	var listOfTotals map[int]int = make(map[int]int)
 	var totalPart2 int
 	var totalCount int = 0
-	for i < len(leftSide) {
+	for i < len(leftSide) && j < len(rightSide) {
 		numToCount, err := strconv.Atoi(leftSide[i])
 
 		if err != nil {
@@ -90,7 +90,9 @@ func main() {
 			totalPart2 += numToCount * listOfTotals[numToCount]
 			i++
 			continue
-		} else if numToCheck > numToCount {
+		} else if numToCheck < numToCount {
+			j++ //keep moving, we don't need to count this
+		} else if numToCheck == numToCount {
 			totalCount++
 			j++
 		} else {
